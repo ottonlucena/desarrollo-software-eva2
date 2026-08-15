@@ -105,6 +105,7 @@ solo muestra datos: nunca consulta la base ni contiene reglas de negocio.
 │   │   ├── mi-reserva/       Consultar, modificar y cancelar
 │   │   └── admin/            Panel del personal: reservas y mesas
 │   ├── proxy.ts              Filtro previo a las rutas del panel
+│   │   └── error.tsx         Pantalla de último recurso ante un fallo inesperado
 │   ├── components/           Piezas de interfaz compartidas
 │   ├── services/             Reglas de negocio
 │   ├── repositories/         Acceso a datos
@@ -150,6 +151,26 @@ El acceso se comprueba en dos lugares. `proxy.ts` redirige cuanto antes a quien 
 sesión, para no cargar una pantalla que igualmente iba a rechazarse; y cada página y cada
 acción vuelven a comprobarla, porque una acción se puede invocar sin pasar por la navegación.
 La clave no se guarda en la galleta —solo su huella— y se compara en tiempo constante.
+
+## Decisiones sobre los formularios
+
+Tres reglas que gobiernan todos los formularios de la aplicación. Están explicadas a fondo en
+[`docs/architecture.md`](./docs/architecture.md) §4 y §5.
+
+**Un rechazo nunca borra lo escrito.** El marco de trabajo reinicia los campos en cuanto
+termina la operación que los procesa, así que cada rechazo devuelve también lo recibido y ese
+pasa a ser el valor inicial de los campos. Sin esto, equivocarse en una letra del correo
+vaciaba el formulario entero.
+
+**El navegador solo guarda lo imprescindible.** Un formulario con errores por campo necesita
+recordar lo que la persona escribió; una operación que solo cambia algo y vuelve —retirar una
+mesa, cancelar— no necesita recordar nada, y guardarlo crearía una copia que puede quedar
+desfasada del dato real. En ese segundo caso la confirmación es que el dato cambie a la
+vista.
+
+**Las operaciones envían el estado deseado, no una orden de invertir el actual.** Fijar un
+valor absoluto (`retirar esta mesa`) da el mismo resultado aunque la pantalla esté
+desactualizada o se pulse dos veces; invertir el valor actual, no.
 
 ## Documentación
 

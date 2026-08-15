@@ -115,7 +115,65 @@ salida en `src/generated/prisma`, la URL vive en `prisma.config.ts` (no en el es
 adaptador `@prisma/adapter-pg` obligatorio, y las importaciones apuntan a
 `@/generated/prisma/client`. Ante la duda, consulta Context7.
 
-## 5. Interfaz
+## 5. Formularios y Server Actions
+
+Tres reglas aprendidas resolviendo defectos reales. No las revierta sin entenderlas.
+
+### 5.1 Devuelva siempre lo enviado junto al motivo del rechazo
+
+React **reinicia los campos de un formulario** al terminar la acción que lo procesa. Si la
+acción solo devuelve errores, la persona pierde todo lo que había escrito y un fallo en un
+solo campo la obliga a teclear el formulario entero.
+
+Cada acción que valide debe devolver también los valores recibidos, y el componente debe
+usarlos como valor inicial:
+
+```ts
+const submitted = readSubmittedValues(formData);          // en la acción
+if (!validation.valid) return { fieldErrors, values: submitted };
+```
+
+```tsx
+const submitted = state.values ?? {};                      // en el componente
+<input {...field} defaultValue={submitted.email ?? ''} />
+```
+
+Como React reinicia **al valor inicial**, el formulario vuelve a mostrar lo escrito.
+
+### 5.2 Sin estado en el cliente si no hay nada que mostrar
+
+`useActionState` solo se justifica cuando hay errores por campo o valores que conservar. Para
+una acción que únicamente cambia algo y vuelve —un botón de activar o desactivar—, guardar su
+resultado en el navegador crea una copia del estado que puede quedar desfasada de la real: la
+fila sigue diciendo "Retirar" cuando la mesa ya está retirada.
+
+En esos casos, el formulario vive en un **componente de servidor**, la acción devuelve
+`void`, y Next.js vuelve a dibujar la página con datos frescos al terminar. Si hace falta el
+texto "Aplicando…", se aísla en un componente de cliente mínimo con `useFormStatus`, como en
+`src/app/admin/mesas/toggle-pending-button.tsx`.
+
+La confirmación es que el dato cambie a la vista, no un aviso aparte.
+
+### 5.3 Envíe el estado deseado, nunca "invierta el actual"
+
+Una acción que invierte un valor depende de que la pantalla esté al día. Si no lo está, hace
+lo contrario de lo que la persona pidió, y pulsar dos veces deshace el cambio.
+
+Envíe siempre el valor absoluto que se quiere dejar. Así la operación es idempotente:
+repetirla no cambia el resultado.
+
+```ts
+setTableActive(id, false)   // ✅ "que quede fuera de servicio"
+toggleTableActive(id)       // ❌ depende de lo que el cliente creyera
+```
+
+### 5.4 Ningún fallo puede dejar la pantalla muda
+
+`src/app/error.tsx` recoge cualquier fallo no controlado y ofrece reintentar. Sin esa red, una
+acción interrumpida deja el botón en "Aplicando…" indefinidamente y la persona no sabe si
+esperar o volver a pulsar. No la elimine.
+
+## 6. Interfaz
 
 - **Móvil primero.** La página nunca se desplaza horizontalmente; si una tabla es ancha, se
   desplaza dentro de su propio contenedor.
@@ -125,13 +183,13 @@ adaptador `@prisma/adapter-pg` obligatorio, y las importaciones apuntan a
   usted. Sin emojis ni signos de exclamación.
 - Se sigue la paleta y la escala de espaciado de `docs/design.md`. No inventes colores.
 
-## 6. Tono de la documentación entregable
+## 7. Tono de la documentación entregable
 
 Los archivos de `docs/` y el `README.md` son parte de la entrega. Se escriben como trabajo de
 diseño: cada decisión se justifica por su **mérito técnico o de producto**. No se citan pautas
 de evaluación, ni se mencionan calificaciones, ni se escriben frases del tipo "esto se pide".
 
-## 7. Comandos
+## 8. Comandos
 
 ```bash
 npm run db:up        # levantar PostgreSQL en Docker

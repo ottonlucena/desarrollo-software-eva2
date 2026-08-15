@@ -101,7 +101,50 @@ está libre; el tercero no puede dar un mensaje amable. Los tres son necesarios.
 reservada" no es un fallo del programa: es una respuesta legítima que la interfaz debe saber
 mostrar. Las excepciones quedan para lo que de verdad es excepcional (la base de datos caída).
 
-## 5. Convenciones de código
+**Un rechazo nunca borra lo que la persona escribió.** El marco de trabajo reinicia los
+campos de un formulario en cuanto termina la operación que lo procesa. Si el rechazo viajara
+solo con los mensajes de error, un fallo en un único campo vaciaría todo el formulario y
+obligaría a teclearlo de nuevo. Por eso el rechazo lleva de vuelta también lo recibido, y ese
+pasa a ser el valor inicial de cada campo: como el reinicio devuelve los campos a su valor
+inicial, en pantalla reaparece lo escrito.
+
+## 5. Dónde vive el estado de una pantalla
+
+Una pantalla puede recordar cosas en el navegador o leerlas del servidor en cada dibujado.
+La regla es **guardar en el navegador lo mínimo imprescindible**, porque toda copia local
+puede quedar desfasada de la realidad.
+
+| Situación | Dónde vive el estado |
+|---|---|
+| El formulario tiene errores por campo o datos que conservar | En el navegador. Es imprescindible: el servidor no puede recordar lo que la persona escribió y aún no guardó. |
+| La operación solo cambia algo y vuelve (activar, retirar, cancelar) | En el servidor. La pantalla se vuelve a dibujar con datos frescos y no hay copia que mantener. |
+
+El segundo caso se aprendió corrigiendo un defecto: el botón que retira una mesa guardaba el
+resultado de la operación para mostrar un aviso, y esa copia podía quedar desalineada del
+dato real, dejando la fila con el botón equivocado. Al dejar de guardar nada, **la
+confirmación pasa a ser que el dato cambie a la vista**, que además es más honesto: se ve el
+estado real, no un mensaje que asegura que cambió.
+
+**Las operaciones envían el estado deseado, no una orden de invertir el actual.** Invertir
+depende de que la pantalla esté al día; fijar un valor absoluto da el mismo resultado aunque
+la pantalla esté vieja o la persona pulse dos veces.
+
+```
+setTableActive(id, false)   ✅ "que quede fuera de servicio"
+toggleTableActive(id)       ❌ depende de lo que el navegador creyera
+```
+
+## 6. Cuando algo falla de verdad
+
+Existe una pantalla de último recurso que recoge cualquier fallo no previsto y ofrece
+reintentar. Sin ella, una operación interrumpida —la base de datos que no responde, el
+servidor reiniciado con la página abierta— dejaría el botón esperando indefinidamente, sin
+decirle nada a quien está delante.
+
+No muestra detalles técnicos, porque quien usa la aplicación no puede hacer nada con ellos;
+el detalle se registra donde sirve, que es el servidor.
+
+## 7. Convenciones de código
 
 | Convención | Regla |
 |---|---|
@@ -113,7 +156,7 @@ mostrar. Las excepciones quedan para lo que de verdad es excepcional (la base de
 | Commits | Mensajes descriptivos en español, un cambio lógico por commit. |
 | Formato | Un formateador automático configurado en el proyecto; nadie discute estilo en la revisión. |
 
-## 6. Estructura de carpetas
+## 8. Estructura de carpetas
 
 Independiente del stack, el proyecto se organiza así:
 
@@ -132,20 +175,20 @@ sabor-gourmet/
 └── README.md
 ```
 
-## 7. Variables de entorno
+## 9. Variables de entorno
 
 Se mantienen al mínimo. Cada una debe justificar su existencia.
 
 | Variable | Para qué |
 |---|---|
 | `DATABASE_URL` | Conexión a la base de datos. |
-| `ADMIN_ACCESS_KEY` | Barrera temporal del panel de administración (ver §8). |
+| `ADMIN_ACCESS_KEY` | Barrera temporal del panel de administración (ver §10). |
 | `APP_ENV` | `development` / `production`. |
 
 Ninguna variable con secreto se sube al repositorio. Se versiona un `.env.example` con los
 nombres y valores de ejemplo.
 
-## 8. Deuda técnica declarada
+## 10. Deuda técnica declarada
 
 Declararla es parte de la honestidad del diseño. Estas son decisiones conscientes, no
 descuidos:

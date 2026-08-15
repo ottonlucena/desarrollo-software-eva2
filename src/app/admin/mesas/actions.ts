@@ -92,26 +92,25 @@ export async function updateTableAction(
  * Pone una mesa en servicio o la retira.
  *
  * Retirarla no cancela sus reservas futuras (R9): el cierre puede ser temporal y el personal
- * quizá prefiera reubicar a esos comensales. La pantalla avisa de ello.
+ * quizá prefiera reubicar a esos comensales.
+ *
+ * No devuelve estado a propósito. Al no devolver nada, el formulario que la invoca no
+ * necesita conservar información en el navegador, y Next.js vuelve a dibujar la página con
+ * los datos frescos en cuanto la acción termina. Antes esta acción devolvía un aviso, y para
+ * mostrarlo el botón mantenía un estado propio que podía quedar desfasado del real: la fila
+ * seguía diciendo "Retirar" aunque la mesa ya estuviera retirada.
+ *
+ * El estado deseado viaja como argumento y es absoluto, no una inversión del actual, así que
+ * repetir la operación deja siempre el mismo resultado.
  */
-export async function setTableActiveAction(
-  tableId: string,
-  active: boolean,
-  _previousState: TableFormState,
-): Promise<TableFormState> {
+export async function setTableActiveAction(tableId: string, active: boolean): Promise<void> {
   await requireAdminSession();
 
-  const result = await setTableActive(tableId, active);
-
-  if (!result.ok) {
-    return { message: describeDomainError(result.error) };
-  }
+  /*
+   * Que la mesa no exista solo puede ocurrir si la fila que se pulsó ya no está en la base.
+   * No hay nada que avisar: basta con volver a dibujar el listado, donde ya no aparecerá.
+   */
+  await setTableActive(tableId, active);
 
   refreshTableViews();
-
-  return {
-    notice: active
-      ? `La mesa ${result.value.number} volvió al servicio.`
-      : `La mesa ${result.value.number} quedó fuera de servicio. Sus reservas ya confirmadas se mantienen.`,
-  };
 }

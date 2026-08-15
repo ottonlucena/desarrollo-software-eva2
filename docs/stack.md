@@ -133,7 +133,7 @@ menos y controlamos más.
 
 | Descartado | Razón |
 |---|---|
-| Contenedor para la aplicación | Docker se usa **solo para la base de datos** (ver §8). Empaquetar además la aplicación agregaría una reconstrucción de imagen en cada cambio, a cambio de nada durante el desarrollo. |
+| Contenedor para la aplicación | Docker se usa **solo para la base de datos** (ver §8 de este documento). Empaquetar además la aplicación agregaría una reconstrucción de imagen en cada cambio, a cambio de nada durante el desarrollo. |
 | Biblioteca de gestión de estado | Con renderizado en servidor, el estado vive en el servidor y en la URL. Agregarla sería resolver un problema que no tenemos. |
 | Capa de caché | Sin volumen que la justifique, solo agregaría datos desactualizados. |
 

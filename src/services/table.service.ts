@@ -105,7 +105,14 @@ export async function updateTable(id: string, input: TableInput): Promise<TableR
   return success(await updateTableRow(id, input));
 }
 
-/** Pone una mesa en servicio o la retira, conservando el resto de su configuración. */
+/**
+ * Pone una mesa en servicio o la retira, conservando el resto de su configuración.
+ *
+ * Recibe el estado **deseado**, no una orden de invertir el actual. La diferencia importa:
+ * si la pantalla mostrara información desactualizada, invertir daría el resultado contrario
+ * al que la persona pidió, mientras que fijar un valor absoluto da el mismo resultado
+ * aunque se repita la operación.
+ */
 export async function setTableActive(id: string, active: boolean): Promise<TableResult> {
   const found = await getTable(id);
 
