@@ -5,7 +5,7 @@
  * reservarse vive en los servicios.
  */
 import { prisma } from '@/lib/prisma';
-import type { Shift } from '@/generated/prisma/enums';
+import type { Shift, Zone } from '@/generated/prisma/enums';
 import { ReservationStatus } from '@/generated/prisma/enums';
 import type { TableModel } from '@/generated/prisma/models';
 
@@ -17,8 +17,50 @@ export function findActiveTables(): Promise<TableModel[]> {
   });
 }
 
+/** Todas las mesas del salón, incluidas las fuera de servicio. Es la vista del personal. */
+export function findAllTables(): Promise<TableModel[]> {
+  return prisma.table.findMany({ orderBy: { number: 'asc' } });
+}
+
 export function findTableById(id: string): Promise<TableModel | null> {
   return prisma.table.findUnique({ where: { id } });
+}
+
+export function findTableByNumber(number: number): Promise<TableModel | null> {
+  return prisma.table.findUnique({ where: { number } });
+}
+
+export type TableData = {
+  number: number;
+  capacity: number;
+  zone: Zone;
+  active: boolean;
+};
+
+export function createTable(data: TableData): Promise<TableModel> {
+  return prisma.table.create({ data });
+}
+
+export function updateTable(id: string, data: TableData): Promise<TableModel> {
+  return prisma.table.update({ where: { id }, data });
+}
+
+/**
+ * Cuántos comensales tiene la reserva confirmada más numerosa de una mesa.
+ *
+ * Permite impedir que se reduzca el aforo por debajo de lo que ya está comprometido: una
+ * mesa rebajada a dos plazas con una reserva confirmada para seis dejaría al restaurante sin
+ * dónde sentar a ese grupo.
+ *
+ * Devuelve 0 si la mesa no tiene reservas confirmadas.
+ */
+export async function findLargestConfirmedPartySize(tableId: string): Promise<number> {
+  const largest = await prisma.reservation.aggregate({
+    where: { tableId, status: ReservationStatus.CONFIRMED },
+    _max: { partySize: true },
+  });
+
+  return largest._max.partySize ?? 0;
 }
 
 /**

@@ -21,6 +21,10 @@ export const DomainError = {
   RESERVATION_NOT_FOUND: 'RESERVATION_NOT_FOUND',
   /** R5: la reserva ya fue cancelada y no admite más cambios. */
   RESERVATION_ALREADY_CANCELLED: 'RESERVATION_ALREADY_CANCELLED',
+  /** El número de mesa debe ser único en el salón. */
+  TABLE_NUMBER_TAKEN: 'TABLE_NUMBER_TAKEN',
+  /** Reducir la capacidad dejaría reservas confirmadas por encima del aforo de la mesa. */
+  CAPACITY_BELOW_EXISTING_RESERVATIONS: 'CAPACITY_BELOW_EXISTING_RESERVATIONS',
 } as const;
 
 export type DomainErrorCode = (typeof DomainError)[keyof typeof DomainError];
@@ -38,6 +42,10 @@ const MESSAGES: Record<DomainErrorCode, string> = {
     'No encontramos una reserva con ese código y ese correo. Revise ambos datos e intente nuevamente.',
   [DomainError.RESERVATION_ALREADY_CANCELLED]:
     'Esa reserva ya está cancelada, por lo que no admite cambios. Puede crear una nueva reserva.',
+  [DomainError.TABLE_NUMBER_TAKEN]:
+    'Ya existe otra mesa con ese número. Use un número que no esté en uso.',
+  [DomainError.CAPACITY_BELOW_EXISTING_RESERVATIONS]:
+    'Hay reservas confirmadas para esa mesa con más comensales que la capacidad indicada. Cámbielas antes de reducir el aforo.',
 };
 
 /** Traduce un código de error de negocio al mensaje que ve el comensal. */

@@ -86,6 +86,37 @@ export function findReservationByCodeAndEmail(
   });
 }
 
+export function findReservationById(id: string): Promise<ReservationWithDetails | null> {
+  return prisma.reservation.findUnique({ where: { id }, include: WITH_DETAILS });
+}
+
+/** Criterios con los que el personal acota el listado del día. */
+export type ReservationFilters = {
+  /** Día del servicio. Sin este dato se listan todas las fechas. */
+  date?: Date;
+  status?: ReservationStatus;
+};
+
+/**
+ * Reservas que cumplen los filtros, ordenadas como se leen en el mesón: primero por día,
+ * después por turno y por número de mesa.
+ *
+ * Los índices sobre (fecha, turno) y (estado, fecha) declarados en el esquema son los que
+ * sostienen esta consulta.
+ */
+export function findReservations(
+  filters: ReservationFilters,
+): Promise<ReservationWithDetails[]> {
+  return prisma.reservation.findMany({
+    where: {
+      ...(filters.date === undefined ? {} : { date: filters.date }),
+      ...(filters.status === undefined ? {} : { status: filters.status }),
+    },
+    include: WITH_DETAILS,
+    orderBy: [{ date: 'asc' }, { shift: 'asc' }, { table: { number: 'asc' } }],
+  });
+}
+
 export type ReservationChanges = {
   tableId: string;
   date: Date;

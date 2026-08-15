@@ -19,8 +19,11 @@ import {
   cancelReservation as cancelReservationRow,
   createReservation as createReservationRow,
   findReservationByCodeAndEmail,
+  findReservationById,
+  findReservations,
   isSlotTakenError,
   updateReservation as updateReservationRow,
+  type ReservationFilters,
   type ReservationWithDetails,
 } from '@/repositories/reservation.repository';
 import { findTableById } from '@/repositories/table.repository';
@@ -134,45 +137,39 @@ export async function findReservation(
   return success(reservation);
 }
 
-/** Aplica cambios a una reserva existente. */
-export async function updateReservation(input: {
-  code: string;
-  email: string;
+/** Cambios que se pueden aplicar a una reserva, vengan del comensal o del personal. */
+export type ReservationChangeRequest = {
   tableId: string;
   date: Date;
   shift: Shift;
   partySize: number;
   notes?: string;
-}): Promise<ReservationResult> {
-  const found = await findReservation(input.code, input.email);
+};
 
-  if (!found.ok) {
-    return found;
-  }
-
-  const reservation = found.value;
-
+/**
+ * Aplica cambios a una reserva ya identificada.
+ *
+ * Concentra las reglas comunes a los dos caminos que llegan aquí —el comensal con su código
+ * y el personal desde el panel—, para que ambos no puedan divergir. Lo único que los
+ * distingue es cómo se acredita quién pide el cambio, y eso ocurre antes de esta función.
+ */
+async function applyChanges(
+  reservation: ReservationWithDetails,
+  changes: ReservationChangeRequest,
+): Promise<ReservationResult> {
   // R5: una reserva cancelada no admite cambios.
   if (reservation.status === ReservationStatus.CANCELLED) {
     return failure(DomainError.RESERVATION_ALREADY_CANCELLED);
   }
 
-  const tableProblem = await checkTableAccepts(input);
+  const tableProblem = await checkTableAccepts(changes);
 
   if (tableProblem !== null) {
     return failure(tableProblem);
   }
 
   try {
-    const updated = await updateReservationRow(reservation.id, {
-      tableId: input.tableId,
-      date: input.date,
-      shift: input.shift,
-      partySize: input.partySize,
-      notes: input.notes,
-    });
-
-    return success(updated);
+    return success(await updateReservationRow(reservation.id, changes));
   } catch (error: unknown) {
     if (isSlotTakenError(error)) {
       return failure(DomainError.TABLE_ALREADY_BOOKED);
@@ -180,6 +177,19 @@ export async function updateReservation(input: {
 
     throw error;
   }
+}
+
+/** Modificación pedida por el comensal, que se acredita con su código y su correo. */
+export async function updateReservation(
+  input: ReservationChangeRequest & { code: string; email: string },
+): Promise<ReservationResult> {
+  const found = await findReservation(input.code, input.email);
+
+  if (!found.ok) {
+    return found;
+  }
+
+  return applyChanges(found.value, input);
 }
 
 /**
@@ -199,11 +209,67 @@ export async function cancelReservation(
     return found;
   }
 
-  const reservation = found.value;
+  return cancelIfActive(found.value);
+}
 
+/** Cancela una reserva vigente. Rechaza las que ya estaban canceladas (R5). */
+async function cancelIfActive(
+  reservation: ReservationWithDetails,
+): Promise<ReservationResult> {
   if (reservation.status === ReservationStatus.CANCELLED) {
     return failure(DomainError.RESERVATION_ALREADY_CANCELLED);
   }
 
   return success(await cancelReservationRow(reservation.id));
+}
+
+/* -------------------------------------------------------------------------
+ * Operaciones del personal del restaurante.
+ *
+ * Se distinguen de las anteriores solo en cómo se identifica la reserva: el personal la
+ * abre desde el listado del panel, así que la referencia por su identificador en lugar de
+ * pedir el código y el correo del comensal. Las reglas que se aplican después son las
+ * mismas, porque son las mismas funciones.
+ * ------------------------------------------------------------------------- */
+
+/** Listado del panel, acotado por fecha y estado. */
+export function listReservations(
+  filters: ReservationFilters,
+): Promise<ReservationWithDetails[]> {
+  return findReservations(filters);
+}
+
+export async function getReservation(id: string): Promise<ReservationResult> {
+  const reservation = await findReservationById(id);
+
+  if (reservation === null) {
+    return failure(DomainError.RESERVATION_NOT_FOUND);
+  }
+
+  return success(reservation);
+}
+
+/** Modificación hecha por el personal desde el panel. */
+export async function updateReservationAsStaff(
+  id: string,
+  changes: ReservationChangeRequest,
+): Promise<ReservationResult> {
+  const found = await getReservation(id);
+
+  if (!found.ok) {
+    return found;
+  }
+
+  return applyChanges(found.value, changes);
+}
+
+/** Cancelación hecha por el personal, normalmente porque el comensal llamó por teléfono. */
+export async function cancelReservationAsStaff(id: string): Promise<ReservationResult> {
+  const found = await getReservation(id);
+
+  if (!found.ok) {
+    return found;
+  }
+
+  return cancelIfActive(found.value);
 }
