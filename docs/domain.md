@@ -1,4 +1,4 @@
-# Modelo de dominio — Sabor Gourmet
+# Modelo de dominio — Restaurante pa’ que mi suegra
 
 Este documento define **qué existe** en el sistema, **cómo se relaciona** y **qué reglas** lo
 gobiernan. Está escrito de forma independiente de la tecnología: describe el negocio, no la
@@ -69,7 +69,7 @@ El corazón del sistema. Conecta un cliente con una mesa en un momento determina
 | Campo | Tipo | Reglas |
 |---|---|---|
 | `id` | identificador | Generado por el sistema. |
-| `code` | texto | **Único**, generado por el sistema. Formato `SG-XXXXXX` (6 caracteres alfanuméricos en mayúscula). Es la "llave" del comensal. |
+| `code` | texto | **Único**, generado por el sistema. Formato `PQ-XXXXXX` (6 caracteres alfanuméricos en mayúscula). Es la "llave" del comensal. |
 | `customerId` | referencia | Obligatorio. A qué cliente pertenece. |
 | `tableId` | referencia | Obligatorio. Qué mesa ocupa. |
 | `date` | fecha | Obligatorio. No puede estar en el pasado. |

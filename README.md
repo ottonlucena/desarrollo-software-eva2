@@ -1,4 +1,4 @@
-# Sabor Gourmet — Sistema de Reservas
+# Restaurante pa’ que mi suegra — Sistema de Reservas
 
 Aplicación web que reemplaza la gestión manual de reservas de un restaurante de alta cocina.
 Permite al comensal consultar disponibilidad y reservar una mesa en línea, y al personal
@@ -118,7 +118,7 @@ el formulario entero: el rechazo devuelve lo recibido y los campos vuelven a mos
 
 ![Pantalla de confirmación con el código en grande](public/capturas/05-codigo-reserva.png)
 
-El comensal no crea una cuenta. Recibe un código con el formato `SG-XXXXXX` que, junto con su
+El comensal no crea una cuenta. Recibe un código con el formato `PQ-XXXXXX` que, junto con su
 correo, le permite gestionar su reserva. Se muestra en grande y con las letras separadas
 porque se copia a mano y se dicta por teléfono; por eso mismo el alfabeto excluye los
 caracteres que se confunden al leerlos: no hay O ni 0, ni I, L o 1.
@@ -253,7 +253,7 @@ el mismo turno"* la garantiza un **índice único parcial** en PostgreSQL —no 
 aplicación que se pueda olvidar—, incluso si dos personas envían el formulario en el mismo
 instante.
 
-El comensal recibe un **código de reserva** (`SG-XXXXXX`) que, junto con su correo, le permite
+El comensal recibe un **código de reserva** (`PQ-XXXXXX`) que, junto con su correo, le permite
 consultar, modificar y cancelar sin necesidad de crear una cuenta.
 
 ## Panel del personal

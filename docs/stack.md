@@ -1,6 +1,6 @@
 # Elección tecnológica y su justificación
 
-Qué tecnologías elegimos para construir Sabor Gourmet y por qué. Cada elección responde a una
+Qué tecnologías elegimos para construir Restaurante pa’ que mi suegra y por qué. Cada elección responde a una
 necesidad concreta del proyecto descrito en el [brief](./brief.md), no a la preferencia
 personal ni a lo que esté de moda.
 

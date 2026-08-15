@@ -1,11 +1,11 @@
-# Identidad visual — Sabor Gourmet
+# Identidad visual — Restaurante pa’ que mi suegra
 
 Cómo debe verse y sentirse el sistema. Este documento existe para que las decisiones
 visuales sean **decisiones**, y no lo que el framework traiga por defecto.
 
 ## 1. Posicionamiento
 
-"Sabor Gourmet" es un restaurante de **alta cocina**. El sitio no compite con una app de
+"Restaurante pa’ que mi suegra" es un restaurante de **alta cocina**. El sitio no compite con una app de
 delivery: compite con la sensación de llamar por teléfono a un lugar bueno y que te atiendan
 bien. Debe transmitir **calma, cuidado y confianza**.
 

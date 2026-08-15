@@ -1,4 +1,4 @@
-# Arquitectura — Sabor Gourmet
+# Arquitectura — Restaurante pa’ que mi suegra
 
 Este documento recoge las **decisiones de diseño** del sistema y el porqué de cada una. No es
 un ADR: es el insumo del que después se extraen los ADRs definitivos.
@@ -161,7 +161,7 @@ el detalle se registra donde sirve, que es el servidor.
 Independiente del stack, el proyecto se organiza así:
 
 ```
-sabor-gourmet/
+restaurante-pa-que-mi-suegra/
 ├── docs/                  ← toda la documentación de este proyecto
 ├── <migraciones>/         ← esquema versionado
 ├── src/

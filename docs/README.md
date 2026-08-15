@@ -1,4 +1,4 @@
-# Documentación — Sistema de Reservas "Sabor Gourmet"
+# Documentación — Sistema de Reservas "Restaurante pa’ que mi suegra"
 
 Análisis y diseño del sistema, escritos antes de programar. Cada decisión está justificada:
 lo que se busca es que cualquiera pueda entender **por qué** el sistema es como es, no solo

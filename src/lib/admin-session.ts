@@ -20,7 +20,7 @@ import { createHash, timingSafeEqual } from 'node:crypto';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-export const ADMIN_COOKIE_NAME = 'sabor_gourmet_admin';
+export const ADMIN_COOKIE_NAME = 'pa_que_mi_suegra_admin';
 
 /** Ocho horas: cubre un turno completo sin dejar la sesión abierta indefinidamente. */
 const SESSION_DURATION_SECONDS = 8 * 60 * 60;

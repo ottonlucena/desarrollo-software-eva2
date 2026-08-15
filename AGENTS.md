@@ -10,7 +10,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 ---
 
-# Sabor Gourmet — lineamientos del proyecto
+# Restaurante pa’ que mi suegra — lineamientos del proyecto
 
 Sistema de reservas para un restaurante de alta cocina. Estas reglas aplican a **cualquier
 agente o sesión** que trabaje en este repositorio. Léelas antes de escribir código.

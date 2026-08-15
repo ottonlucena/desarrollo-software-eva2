@@ -20,7 +20,7 @@ export default async function AdminAccessPage() {
     <div className={formStyles.page}>
       <h1 className={formStyles.pageTitle}>Panel del restaurante</h1>
       <p className={formStyles.pageIntro}>
-        Esta zona es para el personal de Sabor Gourmet. Indique la clave del local para
+        Esta zona es para el personal de Restaurante pa’ que mi suegra. Indique la clave del local para
         continuar.
       </p>
 

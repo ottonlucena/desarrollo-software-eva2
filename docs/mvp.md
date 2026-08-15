@@ -1,4 +1,4 @@
-# MVP — Sistema de Reservas "Sabor Gourmet"
+# MVP — Sistema de Reservas "Restaurante pa’ que mi suegra"
 
 El [brief](./brief.md) describe lo que el restaurante quiere. Este documento define **lo
 mínimo que ya le entrega valor** y que somos capaces de construir bien, en vez de construir

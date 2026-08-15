@@ -15,11 +15,11 @@ import { randomInt } from 'node:crypto';
  */
 const UNAMBIGUOUS_CHARACTERS = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
 
-const CODE_PREFIX = 'SG';
+const CODE_PREFIX = 'PQ';
 const CODE_LENGTH = 6;
 
 /**
- * Devuelve un código con el formato `SG-XXXXXX`.
+ * Devuelve un código con el formato `PQ-XXXXXX`.
  *
  * La unicidad no depende de esta función, sino de la restricción `@unique` de la columna:
  * si dos códigos coincidieran, la base de datos rechazaría el segundo y el servicio lo

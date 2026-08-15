@@ -26,9 +26,9 @@ const sans = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'Sabor Gourmet · Reservas',
+  title: 'Restaurante pa’ que mi suegra · Reservas',
   description:
-    'Reserve su mesa en Sabor Gourmet. Consulte la disponibilidad del día y confirme en línea.',
+    'Reserve su mesa en Restaurante pa’ que mi suegra. Consulte la disponibilidad del día y confirme en línea.',
 };
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {
@@ -37,7 +37,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
       <body>
         <header className={styles.header}>
           <Link href="/" className={styles.brand}>
-            Sabor Gourmet
+            Restaurante pa’ que mi suegra
           </Link>
           <nav aria-label="Principal">
             <Link href="/mi-reserva" className={styles.navLink}>
@@ -51,7 +51,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
         <footer className={styles.footer}>
           <div className={styles.footerInner}>
             <div>
-              <p className={styles.footerTitle}>Sabor Gourmet</p>
+              <p className={styles.footerTitle}>Restaurante pa’ que mi suegra</p>
               <p>Avenida Providencia 1234, Santiago</p>
               <p>+56 2 2345 6789</p>
             </div>

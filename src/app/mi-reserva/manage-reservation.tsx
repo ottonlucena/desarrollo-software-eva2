@@ -126,7 +126,7 @@ export function ManageReservation() {
         <Field
           name="code"
           label="Código de reserva"
-          hint="Lo recibió al confirmar, con el formato SG-XXXXXX."
+          hint="Lo recibió al confirmar, con el formato PQ-XXXXXX."
           error={firstError(state.fieldErrors, 'code')}
         >
           {(field) => (

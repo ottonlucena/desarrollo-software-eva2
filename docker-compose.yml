@@ -11,12 +11,12 @@
 services:
   postgres:
     image: postgres:17-alpine
-    container_name: sabor-gourmet-db
+    container_name: pa-que-mi-suegra-db
     restart: unless-stopped
     environment:
-      POSTGRES_USER: sabor
-      POSTGRES_PASSWORD: sabor
-      POSTGRES_DB: sabor_gourmet
+      POSTGRES_USER: suegra
+      POSTGRES_PASSWORD: suegra
+      POSTGRES_DB: pa_que_mi_suegra
     ports:
       # 5433 en el anfitrión para no chocar con una instalación local de PostgreSQL.
       - "5433:5432"
@@ -24,7 +24,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
       # Permite que otras herramientas esperen a que el motor acepte conexiones.
-      test: ["CMD-SHELL", "pg_isready -U sabor -d sabor_gourmet"]
+      test: ["CMD-SHELL", "pg_isready -U suegra -d pa_que_mi_suegra"]
       interval: 5s
       timeout: 5s
       retries: 10

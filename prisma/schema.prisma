@@ -1,4 +1,4 @@
-// Esquema de la base de datos de Sabor Gourmet.
+// Esquema de la base de datos de Restaurante pa’ que mi suegra.
 //
 // Este archivo es la única fuente de la verdad del modelo de datos: de aquí salen las
 // migraciones versionadas y los tipos de TypeScript que usa toda la aplicación.
@@ -88,7 +88,7 @@ model Table {
 /// Reserva de una mesa por parte de un cliente, para una fecha y un turno determinados.
 model Reservation {
   id         String            @id @default(cuid())
-  /// Código que recibe el comensal (formato SG-XXXXXX). Junto con su correo, le permite
+  /// Código que recibe el comensal (formato PQ-XXXXXX). Junto con su correo, le permite
   /// consultar, modificar y cancelar su reserva sin necesidad de crear una cuenta.
   code       String            @unique @db.VarChar(12)
   customerId String

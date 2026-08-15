@@ -1,11 +1,11 @@
-# Brief — Sistema de Reservas "Sabor Gourmet"
+# Brief — Sistema de Reservas "Restaurante pa’ que mi suegra"
 
 > Nuestra lectura del problema, escrita con nuestras palabras: qué necesita realmente el
 > restaurante, qué vamos a construir y por qué.
 
 ## 1. El cliente
 
-"Sabor Gourmet" es un restaurante que hoy gestiona sus reservas de forma manual: alguien
+"Restaurante pa’ que mi suegra" es un restaurante que hoy gestiona sus reservas de forma manual: alguien
 anota en un cuaderno o una planilla quién viene, cuándo y a qué mesa. Nos contratan porque
 ese método les está costando dinero y prestigio.
 

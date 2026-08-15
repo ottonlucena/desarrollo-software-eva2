@@ -15,7 +15,7 @@ export default function HomePage() {
       <section className={styles.hero}>
         <div className={styles.heroContent}>
           <p className={styles.eyebrow}>Cocina de autor · Santiago</p>
-          <h1 className={styles.title}>Sabor Gourmet</h1>
+          <h1 className={styles.title}>Restaurante pa’ que mi suegra</h1>
           <p className={styles.subtitle}>
             Una carta breve que cambia con la temporada, en un salón pensado para conversar
             sin prisa.
