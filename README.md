@@ -10,7 +10,7 @@ administrar las reservas y la configuración del salón.
 |---|---|
 | Análisis y diseño (`docs/`) | ✅ Completo |
 | Modelo de datos y migraciones | ✅ Completo |
-| Portal público | ⏳ En desarrollo |
+| Portal público: reservar, consultar, modificar y cancelar | ✅ Completo |
 | Panel de administración | ⏳ En desarrollo |
 
 ## Tecnologías
@@ -100,6 +100,10 @@ solo muestra datos: nunca consulta la base ni contiene reglas de negocio.
 │   └── seed.ts               Mesas iniciales del restaurante
 ├── src/
 │   ├── app/                  Rutas, vistas y controladores (Server Actions)
+│   │   ├── reservar/         Buscar disponibilidad y confirmar la reserva
+│   │   ├── reserva/          Confirmación con el código
+│   │   └── mi-reserva/       Consultar, modificar y cancelar
+│   ├── components/           Piezas de interfaz compartidas
 │   ├── services/             Reglas de negocio
 │   ├── repositories/         Acceso a datos
 │   ├── validation/           Esquemas de validación con Zod
