@@ -75,6 +75,13 @@
   border-bottom: none;
 }
 
+/* La columna de acciones se ciñe a su contenido en lugar de estirarse hasta el borde. */
+.table th:last-child,
+.table td:last-child {
+  width: 1%;
+  white-space: nowrap;
+}
+
 .tableNumber {
   font-family: var(--font-display);
   font-size: var(--text-lg);

@@ -108,6 +108,13 @@ export function ManageReservation() {
   const reservation = state.reservation;
   const isCancelled = reservation?.status === 'CANCELLED';
 
+  /*
+   * React reinicia los campos del formulario al terminar una acción. Para que un rechazo no
+   * borre lo que la persona acababa de escribir, el valor inicial de cada campo pasa a ser
+   * lo enviado; si no hubo rechazo, se muestran los datos vigentes de la reserva.
+   */
+  const submitted = state.values ?? {};
+
   // Todavía no se ha acreditado a nadie: se pide el código y el correo.
   if (reservation === undefined) {
     return (
@@ -122,7 +129,15 @@ export function ManageReservation() {
           hint="Lo recibió al confirmar, con el formato SG-XXXXXX."
           error={firstError(state.fieldErrors, 'code')}
         >
-          {(field) => <input {...field} type="text" autoComplete="off" maxLength={12} />}
+          {(field) => (
+            <input
+              {...field}
+              type="text"
+              autoComplete="off"
+              maxLength={12}
+              defaultValue={submitted.code ?? ''}
+            />
+          )}
         </Field>
 
         <Field
@@ -131,7 +146,15 @@ export function ManageReservation() {
           hint="El mismo con el que hizo la reserva."
           error={firstError(state.fieldErrors, 'email')}
         >
-          {(field) => <input {...field} type="email" autoComplete="email" maxLength={120} />}
+          {(field) => (
+            <input
+              {...field}
+              type="email"
+              autoComplete="email"
+              maxLength={120}
+              defaultValue={submitted.email ?? ''}
+            />
+          )}
         </Field>
 
         <SubmitButton label="Ver mi reserva" busyLabel="Buscando…" variant="primary" />
@@ -170,7 +193,7 @@ export function ManageReservation() {
                   <input
                     {...field}
                     type="date"
-                    defaultValue={reservation.date}
+                    defaultValue={submitted.date ?? reservation.date}
                     min={toISODate(today())}
                     max={toISODate(addDays(today(), MAX_DAYS_IN_ADVANCE))}
                   />
@@ -179,7 +202,7 @@ export function ManageReservation() {
 
               <Field name="shift" label="Horario" error={firstError(state.fieldErrors, 'shift')}>
                 {(field) => (
-                  <select {...field} defaultValue={reservation.shift}>
+                  <select {...field} defaultValue={submitted.shift ?? reservation.shift}>
                     {shiftsByService().map(({ service, shifts }) => (
                       <optgroup key={service} label={describeService(service)}>
                         {shifts.map((shift) => (
@@ -201,7 +224,7 @@ export function ManageReservation() {
                 error={firstError(state.fieldErrors, 'partySize')}
               >
                 {(field) => (
-                  <select {...field} defaultValue={reservation.partySize}>
+                  <select {...field} defaultValue={submitted.partySize ?? reservation.partySize}>
                     {Array.from({ length: MAX_PARTY_SIZE }, (_, index) => index + 1).map(
                       (size) => (
                         <option key={size} value={size}>
@@ -220,7 +243,7 @@ export function ManageReservation() {
                 error={firstError(state.fieldErrors, 'tableId')}
               >
                 {(field) => (
-                  <select {...field} defaultValue={reservation.tableId}>
+                  <select {...field} defaultValue={submitted.tableId ?? reservation.tableId}>
                     {(state.tableOptions ?? []).map((table) => (
                       <option key={table.id} value={table.id}>
                         Mesa {table.number} · {describeZone(table.zone as Zone)} · hasta{' '}
@@ -242,7 +265,7 @@ export function ManageReservation() {
                 <textarea
                   {...field}
                   className={formStyles.textarea}
-                  defaultValue={reservation.notes}
+                  defaultValue={submitted.notes ?? reservation.notes}
                   maxLength={280}
                 />
               )}

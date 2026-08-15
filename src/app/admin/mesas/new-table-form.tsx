@@ -32,6 +32,12 @@ function SubmitButton() {
 export function NewTableForm() {
   const [state, formAction] = useActionState(createTableAction, INITIAL_STATE);
 
+  /*
+   * Tras un rechazo, los campos vuelven a mostrar lo que se había escrito. Sin esto, quien
+   * escribe un número de mesa ya en uso perdería también la capacidad y el sector.
+   */
+  const submitted = state.values;
+
   return (
     <details className={styles.disclosure}>
       <summary className={styles.disclosureSummary}>Registrar una mesa nueva</summary>
@@ -41,7 +47,13 @@ export function NewTableForm() {
         {state.message ? <Alert tone="error">{state.message}</Alert> : null}
 
         <TableFields
-          values={{ number: '', capacity: '', zone: Zone.MAIN_HALL, active: true }}
+          values={{
+            number: submitted?.number ?? '',
+            capacity: submitted?.capacity ?? '',
+            zone: submitted?.zone ?? Zone.MAIN_HALL,
+            // Una casilla sin marcar no se envía, así que su ausencia significa "no marcada".
+            active: submitted === undefined ? true : submitted.active === 'on',
+          }}
           errors={state.fieldErrors}
           idPrefix="nueva-"
         />

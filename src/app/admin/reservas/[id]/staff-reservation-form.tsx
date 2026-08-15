@@ -90,6 +90,12 @@ export function StaffReservationForm({
   // Solo una de las dos operaciones puede haber sido la última; se muestra su resultado.
   const state = cancelState.message ?? cancelState.notice ? cancelState : updateState;
 
+  /*
+   * React reinicia los campos al terminar una acción, así que ante un rechazo el valor
+   * inicial pasa a ser lo enviado: el personal no pierde los cambios que ya había hecho.
+   */
+  const submitted = updateState.values ?? {};
+
   if (isCancelled) {
     return (
       <>
@@ -116,7 +122,7 @@ export function StaffReservationForm({
               <input
                 {...field}
                 type="date"
-                defaultValue={date}
+                defaultValue={submitted.date ?? date}
                 min={toISODate(today())}
                 max={toISODate(addDays(today(), MAX_DAYS_IN_ADVANCE))}
               />
@@ -125,7 +131,7 @@ export function StaffReservationForm({
 
           <Field name="shift" label="Turno" error={firstError(updateState.fieldErrors, 'shift')}>
             {(field) => (
-              <select {...field} defaultValue={shift}>
+              <select {...field} defaultValue={submitted.shift ?? shift}>
                 {shiftsByService().map(({ service, shifts }) => (
                   <optgroup key={service} label={describeService(service)}>
                     {shifts.map((option) => (
@@ -147,7 +153,7 @@ export function StaffReservationForm({
             error={firstError(updateState.fieldErrors, 'partySize')}
           >
             {(field) => (
-              <select {...field} defaultValue={partySize}>
+              <select {...field} defaultValue={submitted.partySize ?? partySize}>
                 {Array.from({ length: MAX_PARTY_SIZE }, (_, index) => index + 1).map((size) => (
                   <option key={size} value={size}>
                     {size}
@@ -164,7 +170,7 @@ export function StaffReservationForm({
             error={firstError(updateState.fieldErrors, 'tableId')}
           >
             {(field) => (
-              <select {...field} defaultValue={tableId}>
+              <select {...field} defaultValue={submitted.tableId ?? tableId}>
                 {tableChoices.map((table) => (
                   <option key={table.id} value={table.id}>
                     Mesa {table.number} · {describeZone(table.zone)} · hasta {table.capacity}
@@ -185,7 +191,7 @@ export function StaffReservationForm({
             <textarea
               {...field}
               className={formStyles.textarea}
-              defaultValue={notes}
+              defaultValue={submitted.notes ?? notes}
               maxLength={280}
             />
           )}

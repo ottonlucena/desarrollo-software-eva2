@@ -18,7 +18,12 @@ import {
   findReservation,
   updateReservation,
 } from '@/services/reservation.service';
-import { validateFormData, type FieldErrors } from '@/validation/form';
+import {
+  readSubmittedValues,
+  validateFormData,
+  type FieldErrors,
+  type SubmittedValues,
+} from '@/validation/form';
 import {
   reservationLookupSchema,
   updateReservationSchema,
@@ -58,6 +63,13 @@ export type ManageReservationState = {
   reservation?: ReservationView;
   /** Mesas libres para la fecha y el turno que la reserva tiene ahora. */
   tableOptions?: TableOption[];
+  /**
+   * Lo que la persona había escrito cuando el envío fue rechazado.
+   *
+   * React reinicia los campos al terminar una acción, así que sin esto un rechazo borraría
+   * los cambios que la persona acababa de hacer.
+   */
+  values?: SubmittedValues;
 };
 
 /** Traduce la reserva del modelo a lo que la vista muestra. */
@@ -123,15 +135,16 @@ async function findReservationAction(
   formData: FormData,
 ): Promise<ManageReservationState> {
   const validation = validateFormData(reservationLookupSchema, formData);
+  const submitted = readSubmittedValues(formData);
 
   if (!validation.valid) {
-    return { fieldErrors: validation.fieldErrors };
+    return { fieldErrors: validation.fieldErrors, values: submitted };
   }
 
   const result = await findReservation(validation.data.code, validation.data.email);
 
   if (!result.ok) {
-    return { message: describeDomainError(result.error) };
+    return { message: describeDomainError(result.error), values: submitted };
   }
 
   return {
@@ -142,13 +155,24 @@ async function findReservationAction(
 
 /** Modificación: aplica los cambios y devuelve la reserva ya actualizada. */
 async function updateReservationAction(
-  _previousState: ManageReservationState,
+  previousState: ManageReservationState,
   formData: FormData,
 ): Promise<ManageReservationState> {
   const validation = validateFormData(updateReservationSchema, formData);
+  const submitted = readSubmittedValues(formData);
 
   if (!validation.valid) {
-    return { fieldErrors: validation.fieldErrors };
+    /*
+     * Los datos de la reserva no cambiaron, así que se conservan los que ya estaban en
+     * pantalla; lo único que se agrega son los errores y lo que la persona había escrito.
+     */
+    return {
+      ...previousState,
+      notice: undefined,
+      message: undefined,
+      fieldErrors: validation.fieldErrors,
+      values: submitted,
+    };
   }
 
   const result = await updateReservation(validation.data);
@@ -165,6 +189,7 @@ async function updateReservationAction(
       message: describeDomainError(result.error),
       reservation: current.ok ? toView(current.value) : undefined,
       tableOptions: current.ok ? await listOptions(current.value) : undefined,
+      values: submitted,
     };
   }
 

@@ -15,10 +15,16 @@ import { MAX_TABLE_CAPACITY, MIN_TABLE_CAPACITY } from '@/validation/admin';
 
 import styles from './page.module.css';
 
+/**
+ * Valores iniciales de los campos.
+ *
+ * Son cadenas porque provienen indistintamente de la base de datos o de lo que la persona
+ * acababa de escribir cuando el envío fue rechazado, y un formulario solo maneja texto.
+ */
 export type TableValues = {
-  number: number | '';
-  capacity: number | '';
-  zone: Zone;
+  number: string;
+  capacity: string;
+  zone: string;
   active: boolean;
 };
 

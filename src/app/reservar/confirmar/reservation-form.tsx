@@ -46,6 +46,13 @@ type ReservationFormProps = {
 export function ReservationForm({ tableId, date, shift, partySize }: ReservationFormProps) {
   const [state, formAction] = useActionState(createReservationAction, INITIAL_STATE);
 
+  /*
+   * Al terminar una acción, React reinicia los campos del formulario dejándolos en su valor
+   * inicial. Por eso el valor inicial pasa a ser lo que la persona acababa de escribir: así
+   * un error en un campo no la obliga a teclear de nuevo todos los demás.
+   */
+  const submitted = state.values ?? {};
+
   return (
     <form action={formAction} className={styles.form} noValidate>
       {/*
@@ -62,11 +69,27 @@ export function ReservationForm({ tableId, date, shift, partySize }: Reservation
 
       <div className={styles.row}>
         <Field name="firstName" label="Nombre" error={firstError(state.fieldErrors, 'firstName')}>
-          {(field) => <input {...field} type="text" autoComplete="given-name" maxLength={50} />}
+          {(field) => (
+            <input
+              {...field}
+              type="text"
+              autoComplete="given-name"
+              maxLength={50}
+              defaultValue={submitted.firstName ?? ''}
+            />
+          )}
         </Field>
 
         <Field name="lastName" label="Apellido" error={firstError(state.fieldErrors, 'lastName')}>
-          {(field) => <input {...field} type="text" autoComplete="family-name" maxLength={50} />}
+          {(field) => (
+            <input
+              {...field}
+              type="text"
+              autoComplete="family-name"
+              maxLength={50}
+              defaultValue={submitted.lastName ?? ''}
+            />
+          )}
         </Field>
       </div>
 
@@ -76,7 +99,15 @@ export function ReservationForm({ tableId, date, shift, partySize }: Reservation
         hint="Lo necesitará, junto con su código, para modificar o cancelar la reserva."
         error={firstError(state.fieldErrors, 'email')}
       >
-        {(field) => <input {...field} type="email" autoComplete="email" maxLength={120} />}
+        {(field) => (
+          <input
+            {...field}
+            type="email"
+            autoComplete="email"
+            maxLength={120}
+            defaultValue={submitted.email ?? ''}
+          />
+        )}
       </Field>
 
       <Field
@@ -86,7 +117,15 @@ export function ReservationForm({ tableId, date, shift, partySize }: Reservation
         hint="Por si necesitamos comunicarnos con usted el mismo día."
         error={firstError(state.fieldErrors, 'phone')}
       >
-        {(field) => <input {...field} type="tel" autoComplete="tel" maxLength={15} />}
+        {(field) => (
+          <input
+            {...field}
+            type="tel"
+            autoComplete="tel"
+            maxLength={15}
+            defaultValue={submitted.phone ?? ''}
+          />
+        )}
       </Field>
 
       <Field
@@ -96,7 +135,14 @@ export function ReservationForm({ tableId, date, shift, partySize }: Reservation
         hint="Alergias, celebraciones o si necesita silla para bebé."
         error={firstError(state.fieldErrors, 'notes')}
       >
-        {(field) => <textarea {...field} className={styles.textarea} maxLength={280} />}
+        {(field) => (
+          <textarea
+            {...field}
+            className={styles.textarea}
+            maxLength={280}
+            defaultValue={submitted.notes ?? ''}
+          />
+        )}
       </Field>
 
       <SubmitButton />

@@ -14,13 +14,20 @@ import {
   cancelReservationAsStaff,
   updateReservationAsStaff,
 } from '@/services/reservation.service';
-import { validateFormData, type FieldErrors } from '@/validation/form';
+import {
+  readSubmittedValues,
+  validateFormData,
+  type FieldErrors,
+  type SubmittedValues,
+} from '@/validation/form';
 import { updateReservationSchema } from '@/validation/reservation';
 
 export type StaffReservationState = {
   message?: string;
   notice?: string;
   fieldErrors?: FieldErrors;
+  /** Lo enviado, para que un rechazo no borre los cambios ya hechos en pantalla. */
+  values?: SubmittedValues;
 };
 
 /**
@@ -40,15 +47,16 @@ export async function updateReservationAsStaffAction(
   await requireAdminSession();
 
   const validation = validateFormData(staffChangesSchema, formData);
+  const submitted = readSubmittedValues(formData);
 
   if (!validation.valid) {
-    return { fieldErrors: validation.fieldErrors };
+    return { fieldErrors: validation.fieldErrors, values: submitted };
   }
 
   const result = await updateReservationAsStaff(reservationId, validation.data);
 
   if (!result.ok) {
-    return { message: describeDomainError(result.error) };
+    return { message: describeDomainError(result.error), values: submitted };
   }
 
   /*

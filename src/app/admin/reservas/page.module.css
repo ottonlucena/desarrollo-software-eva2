@@ -39,8 +39,24 @@
 .table td {
   padding: var(--space-3) var(--space-4);
   text-align: left;
-  vertical-align: top;
+  /*
+   * Al centro y no arriba: las celdas de mesa y comensal ocupan dos líneas, y con alineación
+   * superior el enlace de la última columna —que tiene 44 px de alto táctil— quedaba
+   * visiblemente más abajo que el resto de la fila.
+   */
+  vertical-align: middle;
   border-bottom: var(--border-hairline);
+}
+
+/*
+ * La columna de acciones se ciñe a su contenido en lugar de estirarse. Un ancho del 1 % es
+ * la forma habitual de decirle a una tabla "lo mínimo posible": el reparto sobrante se lo
+ * quedan las columnas de datos.
+ */
+.table th:last-child,
+.table td:last-child {
+  width: 1%;
+  white-space: nowrap;
 }
 
 .table th {

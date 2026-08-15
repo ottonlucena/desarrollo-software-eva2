@@ -39,12 +39,27 @@ export function EditTableForm({ tableId, values }: EditTableFormProps) {
     INITIAL_STATE,
   );
 
+  /*
+   * Ante un rechazo se muestran los valores enviados en lugar de los guardados, para que el
+   * personal vea lo que intentó y pueda corregir solo el campo que falló.
+   */
+  const submitted = state.values;
+
   return (
     <form action={formAction} className={formStyles.form} noValidate>
       {state.notice ? <Alert tone="success">{state.notice}</Alert> : null}
       {state.message ? <Alert tone="error">{state.message}</Alert> : null}
 
-      <TableFields values={values} errors={state.fieldErrors} idPrefix="mesa-" />
+      <TableFields
+        values={{
+          number: submitted?.number ?? values.number,
+          capacity: submitted?.capacity ?? values.capacity,
+          zone: submitted?.zone ?? values.zone,
+          active: submitted === undefined ? values.active : submitted.active === 'on',
+        }}
+        errors={state.fieldErrors}
+        idPrefix="mesa-"
+      />
 
       <SubmitButton />
     </form>

@@ -57,8 +57,8 @@ export default async function AdminTableDetailPage(props: PageProps<'/admin/mesa
       <EditTableForm
         tableId={table.id}
         values={{
-          number: table.number,
-          capacity: table.capacity,
+          number: String(table.number),
+          capacity: String(table.capacity),
           zone: table.zone,
           active: table.active,
         }}

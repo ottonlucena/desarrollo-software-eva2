@@ -11,7 +11,12 @@ import { redirect } from 'next/navigation';
 
 import { describeDomainError } from '@/lib/domain-error';
 import { createReservation } from '@/services/reservation.service';
-import { validateFormData, type FieldErrors } from '@/validation/form';
+import {
+  readSubmittedValues,
+  validateFormData,
+  type FieldErrors,
+  type SubmittedValues,
+} from '@/validation/form';
 import { createReservationSchema } from '@/validation/reservation';
 
 /**
@@ -25,6 +30,8 @@ export type CreateReservationState = {
   message?: string;
   /** Mensajes por campo, que se muestran bajo cada uno.  */
   fieldErrors?: FieldErrors;
+  /** Lo que la persona ya había escrito, para no hacerla teclearlo otra vez. */
+  values?: SubmittedValues;
 };
 
 export async function createReservationAction(
@@ -33,14 +40,17 @@ export async function createReservationAction(
 ): Promise<CreateReservationState> {
   const validation = validateFormData(createReservationSchema, formData);
 
+  // En todo camino de rechazo se devuelve lo escrito junto con el motivo.
+  const submitted = readSubmittedValues(formData);
+
   if (!validation.valid) {
-    return { fieldErrors: validation.fieldErrors };
+    return { fieldErrors: validation.fieldErrors, values: submitted };
   }
 
   const result = await createReservation(validation.data);
 
   if (!result.ok) {
-    return { message: describeDomainError(result.error) };
+    return { message: describeDomainError(result.error), values: submitted };
   }
 
   /*

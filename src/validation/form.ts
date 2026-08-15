@@ -10,6 +10,29 @@ import type { ZodType } from 'zod';
 /** Errores de validación agrupados por campo, tal como los consume el formulario. */
 export type FieldErrors = Record<string, string[]>;
 
+/** Lo que la persona escribió, tal cual lo envió, para poder devolvérselo. */
+export type SubmittedValues = Record<string, string>;
+
+/**
+ * Recoge los valores en crudo de un formulario.
+ *
+ * Sirve para devolverlos junto con los errores: al terminar una acción, React reinicia los
+ * campos del formulario, así que sin esto alguien que se equivoca en una letra de su correo
+ * perdería también su nombre, su teléfono y sus comentarios.
+ */
+export function readSubmittedValues(formData: FormData): SubmittedValues {
+  const values: SubmittedValues = {};
+
+  for (const [field, value] of formData.entries()) {
+    // React agrega campos internos con el prefijo $ACTION que no pertenecen al formulario.
+    if (typeof value === 'string' && !field.startsWith('$ACTION')) {
+      values[field] = value;
+    }
+  }
+
+  return values;
+}
+
 export type ValidationOutcome<TValue> =
   | { readonly valid: true; readonly data: TValue }
   | { readonly valid: false; readonly fieldErrors: FieldErrors };

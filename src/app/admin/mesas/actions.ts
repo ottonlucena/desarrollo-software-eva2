@@ -13,12 +13,19 @@ import { requireAdminSession } from '@/lib/admin-session';
 import { describeDomainError } from '@/lib/domain-error';
 import { createTable, setTableActive, updateTable } from '@/services/table.service';
 import { tableSchema } from '@/validation/admin';
-import { validateFormData, type FieldErrors } from '@/validation/form';
+import {
+  readSubmittedValues,
+  validateFormData,
+  type FieldErrors,
+  type SubmittedValues,
+} from '@/validation/form';
 
 export type TableFormState = {
   message?: string;
   notice?: string;
   fieldErrors?: FieldErrors;
+  /** Lo enviado, para que un rechazo no vacíe el formulario. */
+  values?: SubmittedValues;
 };
 
 /**
@@ -39,15 +46,16 @@ export async function createTableAction(
   await requireAdminSession();
 
   const validation = validateFormData(tableSchema, formData);
+  const submitted = readSubmittedValues(formData);
 
   if (!validation.valid) {
-    return { fieldErrors: validation.fieldErrors };
+    return { fieldErrors: validation.fieldErrors, values: submitted };
   }
 
   const result = await createTable(validation.data);
 
   if (!result.ok) {
-    return { message: describeDomainError(result.error) };
+    return { message: describeDomainError(result.error), values: submitted };
   }
 
   refreshTableViews();
@@ -63,15 +71,16 @@ export async function updateTableAction(
   await requireAdminSession();
 
   const validation = validateFormData(tableSchema, formData);
+  const submitted = readSubmittedValues(formData);
 
   if (!validation.valid) {
-    return { fieldErrors: validation.fieldErrors };
+    return { fieldErrors: validation.fieldErrors, values: submitted };
   }
 
   const result = await updateTable(tableId, validation.data);
 
   if (!result.ok) {
-    return { message: describeDomainError(result.error) };
+    return { message: describeDomainError(result.error), values: submitted };
   }
 
   refreshTableViews();
