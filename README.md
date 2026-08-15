@@ -67,6 +67,125 @@ La aplicación queda disponible en <http://localhost:3000>.
 | `npm run db:studio` | Explorador visual de los datos. |
 | `npm run db:reset` | Borra la base y la reconstruye desde cero. |
 
+## El software en funcionamiento
+
+Recorrido por las pantallas del sistema y por lo que resuelve cada una.
+
+### Portal del comensal
+
+#### Portada
+
+![Portada del restaurante con el botón para reservar](public/capturas/01-portada.png)
+
+Una sola acción principal: reservar. Todo lo demás es secundario. Quien llega con hambre y el
+teléfono en la mano debe alcanzar el formulario en un toque, así que no hay menús desplegables
+ni carruseles que estorben.
+
+#### Buscar disponibilidad
+
+![Resultado de la búsqueda con la rejilla de mesas libres](public/capturas/02-disponibilidad.png)
+
+El comensal indica fecha, horario y cuántos serán, y el sistema responde con las mesas
+realmente libres en ese turno. **Solo se muestran las que puede tomar**: una mesa ocupada no
+aparece en gris, simplemente no está, porque leerla no le sirve de nada.
+
+Las mesas se ordenan por capacidad ascendente, de modo que se ofrece primero la más ajustada
+al grupo y no se malgasta una mesa de ocho personas en una pareja.
+
+La búsqueda viaja en la dirección del navegador (`?fecha=…&turno=…&personas=…`), así que el
+resultado se puede compartir, recargar y recorrer con el botón de volver mientras se comparan
+horarios.
+
+#### Confirmar la reserva
+
+![Resumen de la visita y formulario de datos de contacto](public/capturas/03-confirmar-reserva.png)
+
+Antes de pedir datos personales, la pantalla repite qué se está reservando. Al cargar, el
+servidor vuelve a comprobar que esa mesa siga disponible: alguien pudo llegar con un enlace
+antiguo, o la mesa pudo ocuparse mientras la persona decidía.
+
+#### Validación de los datos
+
+![Formulario rechazado, con el error solo en el campo del correo](public/capturas/04-validacion.png)
+
+Cada campo se valida en el servidor y el error se muestra **bajo el campo que lo provocó**,
+diciendo qué hacer a continuación y no solo qué está mal.
+
+Fíjese en que el resto de los datos siguen escritos. Un error en un campo no obliga a teclear
+el formulario entero: el rechazo devuelve lo recibido y los campos vuelven a mostrarlo.
+
+#### Código de reserva
+
+![Pantalla de confirmación con el código en grande](public/capturas/05-codigo-reserva.png)
+
+El comensal no crea una cuenta. Recibe un código con el formato `SG-XXXXXX` que, junto con su
+correo, le permite gestionar su reserva. Se muestra en grande y con las letras separadas
+porque se copia a mano y se dicta por teléfono; por eso mismo el alfabeto excluye los
+caracteres que se confunden al leerlos: no hay O ni 0, ni I, L o 1.
+
+#### Consultar, modificar y cancelar
+
+![Ficha de la reserva con las opciones de cambio](public/capturas/06-mi-reserva.png)
+
+Con el código y el correo, el comensal ve su reserva y puede cambiarla o cancelarla él mismo.
+El código se acepta aunque se transcriba mal —en minúsculas, con espacios o sin el guion—,
+porque es lo que ocurre cuando se dicta por teléfono.
+
+Al modificar, el desplegable de mesas incluye la que la reserva ya ocupa. Sin esa excepción,
+quien solo quiere cambiar la cantidad de comensales vería su propia mesa marcada como ocupada
+por sí misma.
+
+### Panel del personal
+
+#### Listado de reservas
+
+![Listado del día con reservas confirmadas y una cancelada](public/capturas/07-panel-reservas.png)
+
+Es la pantalla que reemplaza al cuaderno del mesón. Abre en el día de hoy, que es lo que el
+personal necesita al llegar al turno, y encabeza con el recuento de reservas confirmadas y de
+comensales esperados.
+
+Las reservas canceladas se atenúan, pero su estado **además se dice con palabras**: el color
+nunca es el único portador del significado, porque quien no distingue el verde del gris debe
+poder usar el sistema igual.
+
+#### Detalle de una reserva
+
+![Ficha completa de una reserva con los datos de contacto](public/capturas/08-panel-detalle.png)
+
+Aquí el personal ve los datos de contacto del comensal —el correo y el teléfono son enlaces
+directos, para llamar o escribir sin copiarlos— y puede modificar o cancelar la reserva.
+
+Se aplican exactamente las mismas reglas que en el portal público, porque son las mismas
+funciones: no existen dos copias que puedan desincronizarse.
+
+#### Configuración del salón
+
+![Listado de mesas con una fuera de servicio](public/capturas/09-panel-mesas.png)
+
+El personal registra mesas, cambia su capacidad o su sector, y las retira o reactiva sin salir
+del listado. El encabezado resume cuántas están en servicio y cuántas plazas ofrece el salón.
+
+Dos reglas propias de esta pantalla:
+
+- **El número de mesa es único**, porque es como el personal la nombra en el salón.
+- **No se puede reducir la capacidad por debajo de las reservas ya confirmadas.** Una mesa
+  rebajada a dos plazas con una reserva para seis dejaría al restaurante sin dónde sentar a
+  ese grupo el día de la visita.
+
+Retirar una mesa **no cancela** sus reservas futuras: el cierre puede ser temporal y quizá
+convenga reubicar a esos comensales. Esa decisión es del personal, no del sistema.
+
+### En el teléfono
+
+![La misma aplicación en pantalla de teléfono](public/capturas/10-movil.png)
+
+La interfaz está diseñada partiendo del teléfono y creciendo hacia el escritorio, no al revés.
+La página nunca se desplaza en horizontal: cuando una tabla es más ancha que la pantalla, se
+desplaza dentro de su propio contenedor. Las zonas táctiles miden al menos 44 × 44 px y los
+campos de formulario usan 16 px, porque por debajo de ese tamaño los navegadores móviles hacen
+zoom automático al enfocar y descuadran la página.
+
 ## Cómo está organizado el código
 
 El proyecto sigue el patrón **MVC** con cuatro capas de responsabilidad única. Cada capa solo
