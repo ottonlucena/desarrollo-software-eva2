@@ -50,3 +50,7 @@ next-env.d.ts
 *.pdf
 
 # La documentación de `docs/` SÍ forma parte de la entrega: no agregar reglas que la excluyan.
+
+# Archivos de entrega a la plataforma: contienen datos de los integrantes
+# y no forman parte del código del proyecto.
+/entrega/
