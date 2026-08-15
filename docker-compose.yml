@@ -1,0 +1,33 @@
+# Base de datos de desarrollo.
+#
+# Solo levanta PostgreSQL: la aplicación se ejecuta con `npm run dev` en la máquina
+# anfitriona. Esto evita tener que instalar PostgreSQL en el sistema y garantiza que todo el
+# equipo trabaje contra la misma versión del motor.
+#
+#   docker compose up -d      → levantar la base de datos
+#   docker compose down       → detenerla (los datos se conservan en el volumen)
+#   docker compose down -v    → detenerla y borrar los datos
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: sabor-gourmet-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: sabor
+      POSTGRES_PASSWORD: sabor
+      POSTGRES_DB: sabor_gourmet
+    ports:
+      # 5433 en el anfitrión para no chocar con una instalación local de PostgreSQL.
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      # Permite que otras herramientas esperen a que el motor acepte conexiones.
+      test: ["CMD-SHELL", "pg_isready -U sabor -d sabor_gourmet"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  postgres_data:

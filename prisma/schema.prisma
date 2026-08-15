@@ -1,0 +1,124 @@
+// Esquema de la base de datos de Sabor Gourmet.
+//
+// Este archivo es la única fuente de la verdad del modelo de datos: de aquí salen las
+// migraciones versionadas y los tipos de TypeScript que usa toda la aplicación.
+//
+// El modelo de negocio que describe está documentado en `docs/domain.md`.
+
+generator client {
+  // Prisma 7 usa el generador "prisma-client" (el antiguo "prisma-client-js" quedó obsoleto)
+  // y exige una ruta de salida explícita dentro del proyecto.
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  // La cadena de conexión NO va aquí: en Prisma 7 se declara en `prisma.config.ts`.
+}
+
+/// Horarios de entrada que ofrece el restaurante.
+///
+/// Modelar el servicio como turnos discretos (en vez de horas libres con duración) es la
+/// decisión que mantiene simple el cálculo de disponibilidad: una mesa está tomada en un
+/// turno o no lo está, sin intervalos que solapar. Ver `docs/mvp.md`.
+enum Shift {
+  LUNCH_1300
+  LUNCH_1400
+  LUNCH_1500
+  DINNER_2000
+  DINNER_2100
+  DINNER_2200
+}
+
+/// Sectores del local. Permiten al comensal elegir dónde sentarse.
+enum Zone {
+  MAIN_HALL
+  TERRACE
+  WINDOW
+  PRIVATE
+}
+
+/// Estados posibles de una reserva.
+///
+/// Solo dos: mientras no exista un paso de pago o confirmación posterior, un estado
+/// "pendiente" sería un campo que nunca cambia de valor.
+enum ReservationStatus {
+  CONFIRMED
+  CANCELLED
+}
+
+/// Persona que reserva.
+///
+/// Se identifica por su correo electrónico, que es único: si vuelve a reservar con el mismo
+/// correo se reutiliza este registro en lugar de duplicarlo.
+model Customer {
+  id        String   @id @default(cuid())
+  firstName String   @db.VarChar(50)
+  lastName  String   @db.VarChar(50)
+  /// Normalizado a minúsculas antes de guardarse. Es la identidad del comensal.
+  email     String   @unique @db.VarChar(120)
+  phone     String?  @db.VarChar(15)
+  createdAt DateTime @default(now())
+
+  reservations Reservation[]
+
+  @@map("customers")
+}
+
+/// Mesa física del restaurante. Es el recurso escaso que se reserva.
+model Table {
+  id        String   @id @default(cuid())
+  /// Número visible en el salón, tal como lo conoce el personal.
+  number    Int      @unique
+  /// Cuántos comensales caben.
+  capacity  Int
+  zone      Zone
+  /// Baja lógica: una mesa fuera de servicio deja de ofrecerse, pero conserva su historial
+  /// de reservas. Por eso nunca se elimina físicamente.
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  reservations Reservation[]
+
+  @@map("tables")
+}
+
+/// Reserva de una mesa por parte de un cliente, para una fecha y un turno determinados.
+model Reservation {
+  id         String            @id @default(cuid())
+  /// Código que recibe el comensal (formato SG-XXXXXX). Junto con su correo, le permite
+  /// consultar, modificar y cancelar su reserva sin necesidad de crear una cuenta.
+  code       String            @unique @db.VarChar(12)
+  customerId String
+  tableId    String
+  /// Día del servicio. La hora se representa aparte, mediante el turno.
+  date       DateTime          @db.Date
+  shift      Shift
+  /// Cantidad de comensales. Nunca puede superar la capacidad de la mesa.
+  partySize  Int
+  status     ReservationStatus @default(CONFIRMED)
+  /// Alergias, celebraciones, silla para bebé.
+  notes      String?           @db.VarChar(280)
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
+
+  customer Customer @relation(fields: [customerId], references: [id])
+  table    Table    @relation(fields: [tableId], references: [id])
+
+  /// Regla de oro del sistema: una misma mesa no puede tener dos reservas CONFIRMADAS en la
+  /// misma fecha y turno.
+  ///
+  /// Esa restricción vive en la base de datos y no solo en el código, porque dos formularios
+  /// enviados en el mismo instante podrían superar una verificación hecha en la aplicación.
+  /// Se implementa como índice único PARCIAL (`WHERE status = 'CONFIRMED'`) para que cancelar
+  /// libere la mesa de inmediato. Prisma no expresa índices parciales, así que se declara a
+  /// mano en la migración `..._indice_unico_parcial_reservas_activas`.
+  ///
+  /// Acelera además la consulta más frecuente del sistema: qué mesas están tomadas en un turno.
+  @@index([date, shift])
+  /// Acelera el listado del panel de administración, que filtra por fecha y estado.
+  @@index([status, date])
+  @@map("reservations")
+}
