@@ -139,7 +139,11 @@ consultar, modificar y cancelar sin necesidad de crear una cuenta.
 
 ## Panel del personal
 
-Disponible en `/admin`, protegido con la clave definida en `ADMIN_ACCESS_KEY`.
+Disponible en <http://localhost:3000/admin>, protegido con la clave definida en la variable
+`ADMIN_ACCESS_KEY` del archivo `.env`.
+
+> Si copió `.env.example` sin modificarlo, la clave es **`cambiar-esta-clave`**. Cámbiela por
+> otra antes de usar el sistema fuera de su equipo.
 
 | Pantalla | Qué permite |
 |---|---|
