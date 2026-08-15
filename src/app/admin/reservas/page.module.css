@@ -1,0 +1,108 @@
+/* Listado de reservas del panel. Denso y legible de un vistazo. */
+
+.filters {
+  display: grid;
+  gap: var(--space-4);
+  align-items: end;
+  padding: var(--space-6);
+  border: var(--border-hairline);
+  border-radius: var(--radius);
+  background-color: var(--color-sand);
+}
+
+.tally {
+  margin: var(--space-6) 0;
+  font-size: var(--text-sm);
+  color: var(--color-stone);
+}
+
+/*
+ * La tabla se desplaza dentro de este contenedor cuando no cabe. Sin esto, en un teléfono
+ * sería la página entera la que se movería en horizontal.
+ */
+.tableScroll {
+  overflow-x: auto;
+  border: var(--border-hairline);
+  border-radius: var(--radius);
+  background-color: #fff;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+  /* Evita que las columnas se compriman hasta ser ilegibles en pantallas estrechas. */
+  min-width: 46rem;
+}
+
+.table th,
+.table td {
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+  vertical-align: top;
+  border-bottom: var(--border-hairline);
+}
+
+.table th {
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-stone);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table tbody tr:hover {
+  background-color: var(--color-bone);
+}
+
+/* Una fila cancelada se atenúa, pero su estado además se dice con palabras. */
+.rowCancelled td {
+  color: var(--color-stone);
+}
+
+/* Dato secundario bajo el principal: el correo bajo el nombre, el sector bajo la mesa. */
+.secondary {
+  display: block;
+  font-size: var(--text-xs);
+  color: var(--color-stone);
+}
+
+.badgeConfirmed,
+.badgeCancelled {
+  display: inline-block;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius);
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.badgeConfirmed {
+  background-color: rgba(74, 93, 58, 0.14);
+  color: var(--color-success);
+}
+
+.badgeCancelled {
+  background-color: rgba(107, 98, 89, 0.16);
+  color: var(--color-stone);
+}
+
+.rowLink {
+  /* Zona táctil suficiente en la tableta del mesón. */
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  white-space: nowrap;
+}
+
+@media (min-width: 48rem) {
+  .filters {
+    grid-template-columns: 1fr 1fr auto auto;
+  }
+}

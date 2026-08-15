@@ -1,0 +1,95 @@
+/* Detalle de una reserva en el panel. */
+
+.backLink {
+  margin-bottom: var(--space-6);
+  font-size: var(--text-sm);
+}
+
+.summary {
+  display: grid;
+  gap: var(--space-3);
+  margin: var(--space-6) 0 var(--space-8);
+  padding: var(--space-6);
+  border: var(--border-hairline);
+  border-left: var(--border-brass);
+  border-radius: var(--radius);
+  background-color: var(--color-sand);
+}
+
+.summaryRow {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.summaryLabel {
+  font-size: var(--text-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-stone);
+}
+
+.summaryValue {
+  margin: 0;
+  font-size: var(--text-sm);
+}
+
+.summaryValueDate {
+  composes: summaryValue;
+}
+
+/* Solo la inicial: `capitalize` escribiría "Jueves, 20 De Agosto De 2026". */
+.summaryValueDate::first-letter {
+  text-transform: uppercase;
+}
+
+/* Un dato que el comensal no entregó se dice, no se deja en blanco. */
+.absent {
+  color: var(--color-stone);
+  font-style: italic;
+}
+
+.badgeConfirmed,
+.badgeCancelled {
+  display: inline-block;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius);
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.badgeConfirmed {
+  background-color: rgba(74, 93, 58, 0.14);
+  color: var(--color-success);
+}
+
+.badgeCancelled {
+  background-color: rgba(107, 98, 89, 0.16);
+  color: var(--color-stone);
+}
+
+.sectionTitle {
+  margin-top: var(--space-12);
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-3);
+  border-bottom: var(--border-hairline);
+  font-size: var(--text-lg);
+}
+
+.sectionText {
+  margin-bottom: var(--space-4);
+  color: var(--color-stone);
+  font-size: var(--text-sm);
+}
+
+.cancelForm {
+  margin-bottom: var(--space-8);
+}
+
+@media (min-width: 40rem) {
+  .summaryRow {
+    grid-template-columns: 10rem 1fr;
+    gap: var(--space-4);
+    align-items: baseline;
+  }
+}
