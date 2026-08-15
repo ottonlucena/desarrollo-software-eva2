@@ -18,8 +18,15 @@
   font-size: var(--text-xl);
   padding-bottom: var(--space-3);
   border-bottom: var(--border-brass);
-  /* La primera letra de un día en español no va en mayúscula, pero sí al abrir el título. */
-  text-transform: capitalize;
+}
+
+/*
+ * En español los días y los meses van en minúscula, pero el título abre línea. Se levanta
+ * solo la primera letra: `capitalize` pondría en mayúscula cada palabra y produciría
+ * "Jueves, 20 De Agosto De 2026".
+ */
+.resultsTitle::first-letter {
+  text-transform: uppercase;
 }
 
 .resultsCount {

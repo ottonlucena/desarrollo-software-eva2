@@ -91,7 +91,7 @@ export default async function ConfirmReservationPage(
       <dl className={styles.summary}>
         <div className={styles.summaryRow}>
           <dt className={styles.summaryLabel}>Fecha</dt>
-          <dd className={styles.summaryValue}>{describeDate(search.data.date)}</dd>
+          <dd className={styles.summaryValueDate}>{describeDate(search.data.date)}</dd>
         </div>
         <div className={styles.summaryRow}>
           <dt className={styles.summaryLabel}>Horario</dt>

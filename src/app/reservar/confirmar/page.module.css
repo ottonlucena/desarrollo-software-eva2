@@ -26,8 +26,18 @@
 .summaryValue {
   margin: 0;
   font-size: var(--text-base);
-  /* Los nombres de los días en español no llevan mayúscula inicial, pero aquí abren línea. */
-  text-transform: capitalize;
+}
+
+/*
+ * Solo la fecha necesita mayúscula inicial, y solo la primera letra: `capitalize` la
+ * aplicaría a cada palabra y escribiría "Jueves, 20 De Agosto De 2026".
+ */
+.summaryValueDate {
+  composes: summaryValue;
+}
+
+.summaryValueDate::first-letter {
+  text-transform: uppercase;
 }
 
 .changeLink,
