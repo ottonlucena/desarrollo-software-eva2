@@ -1,49 +1,132 @@
+/*
+ * Sistema visual de Sabor Gourmet.
+ *
+ * Define los valores que usa toda la aplicación —color, tipografía, espaciado— como
+ * variables CSS. Ninguna pantalla escribe un color ni una medida a mano: así la identidad
+ * del restaurante se cambia en un solo lugar y no se acumulan tonos casi iguales.
+ *
+ * Los criterios y su justificación están en `docs/design.md`.
+ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Color ------------------------------------------------------------------ */
+  --color-deep: #14110f; /* carbón cálido: fondos de presentación */
+  --color-bone: #f7f4ef; /* hueso: fondo de formularios y panel */
+  --color-sand: #ebe5db; /* arena: tarjetas y filas alternas */
+  --color-ink: #1c1917; /* texto sobre fondo claro */
+  --color-cream: #f2ede4; /* texto sobre fondo oscuro */
+  --color-stone: #6b6259; /* texto secundario, ayudas, metadatos */
+  --color-brass: #b08d57; /* acento: trazos finos, nunca superficies */
+  --color-action: #7a2e2e; /* granate: acción principal */
+  --color-action-strong: #5e2323;
+  --color-success: #4a5d3a;
+  --color-error: #9b2c2c;
+  --color-muted: #a8a29e; /* deshabilitado */
+
+  /* Tipografía ------------------------------------------------------------- */
+  --font-display: var(--font-serif), Georgia, "Times New Roman", serif;
+  --font-body: var(--font-sans), system-ui, -apple-system, sans-serif;
+
+  /* Escala de 16 px con razón 1.25 */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.5625rem;
+  --text-2xl: 1.9375rem;
+  --text-3xl: 2.4375rem;
+  --text-4xl: 3.0625rem;
+
+  /* Espaciado: escala de 4 px, sin valores arbitrarios --------------------- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  /* Forma ------------------------------------------------------------------ */
+  --radius: 2px; /* casi recto: las esquinas muy redondeadas leen como app casual */
+  --border-hairline: 1px solid var(--color-sand);
+  --border-brass: 1px solid var(--color-brass);
+
+  --content-width: 68rem;
+  --form-width: 34rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 html {
-  height: 100%;
+  /* Evita saltos horizontales al aparecer la barra de desplazamiento. */
+  scrollbar-gutter: stable;
 }
 
-html,
 body {
-  max-width: 100vw;
+  margin: 0;
+  background-color: var(--color-bone);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  /* La página nunca se desplaza en horizontal: si algo es ancho, se desplaza él solo. */
   overflow-x: hidden;
 }
 
-body {
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  margin: 0;
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
+p {
   margin: 0;
 }
 
 a {
-  color: inherit;
-  text-decoration: none;
+  color: var(--color-action);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
+a:hover {
+  color: var(--color-action-strong);
+}
+
+/* Accesibilidad ----------------------------------------------------------- */
+
+:focus-visible {
+  outline: 2px solid var(--color-action);
+  outline-offset: 2px;
+}
+
+/* Respeta a quien pide menos movimiento en su sistema operativo. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
+}
+
+/* Texto visible solo para lectores de pantalla. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }

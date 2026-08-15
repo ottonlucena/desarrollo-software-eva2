@@ -1,150 +1,103 @@
-.page {
-  --background: #fafafa;
-  --foreground: #fff;
+/* Portada. */
 
-  --text-primary: #000;
-  --text-secondary: #666;
-
-  --button-primary-hover: #383838;
-  --button-secondary-hover: #f2f2f2;
-  --button-secondary-border: #ebebeb;
-
+.hero {
   display: flex;
-  flex: 1;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-geist-sans);
-  background-color: var(--background);
+  min-height: 32rem;
+  padding: var(--space-16) var(--space-6);
+  background-color: var(--color-deep);
+  color: var(--color-cream);
+  /*
+   * La escena se construye con degradados en lugar de una fotografía: pesa nada, carga al
+   * instante y no depende de ningún servicio externo. El lugar de la fotografía del salón
+   * está reservado aquí.
+   */
+  background-image:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(176, 141, 87, 0.18), transparent 70%),
+    radial-gradient(ellipse 60% 50% at 50% 100%, rgba(122, 46, 46, 0.22), transparent 70%);
+  text-align: center;
 }
 
-.main {
-  display: flex;
-  flex: 1;
-  width: 100%;
-  max-width: 800px;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  background-color: var(--foreground);
-  padding: 120px 60px;
+.heroContent {
+  max-width: 40rem;
 }
 
-.intro {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  text-align: left;
-  gap: 24px;
+.eyebrow {
+  font-size: var(--text-xs);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-brass);
+  margin-bottom: var(--space-6);
 }
 
-.intro h1 {
-  max-width: 320px;
-  font-size: 40px;
-  font-weight: 600;
-  line-height: 48px;
-  letter-spacing: -2.4px;
-  text-wrap: balance;
-  color: var(--text-primary);
+.title {
+  font-size: var(--text-3xl);
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  color: var(--color-cream);
 }
 
-.intro p {
-  max-width: 440px;
-  font-size: 18px;
-  line-height: 32px;
-  text-wrap: balance;
-  color: var(--text-secondary);
+.subtitle {
+  margin-top: var(--space-4);
+  color: rgba(242, 237, 228, 0.78);
+  font-size: var(--text-base);
 }
 
-.intro a {
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.ctas {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  max-width: 440px;
-  gap: 16px;
-  font-size: 14px;
-}
-
-.ctas a {
-  display: flex;
-  justify-content: center;
+.callToAction {
+  display: inline-flex;
   align-items: center;
-  height: 40px;
-  padding: 0 16px;
-  border-radius: 128px;
-  border: 1px solid transparent;
-  transition: 0.2s;
-  cursor: pointer;
-  width: fit-content;
-  font-weight: 500;
+  justify-content: center;
+  min-height: 48px;
+  margin-top: var(--space-8);
+  padding: 0 var(--space-8);
+  border: var(--border-brass);
+  border-radius: var(--radius);
+  background-color: transparent;
+  color: var(--color-cream);
+  font-size: var(--text-sm);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background-color 150ms ease, color 150ms ease;
 }
 
-a.primary {
-  background: var(--text-primary);
-  color: var(--background);
-  gap: 8px;
+.callToAction:hover {
+  background-color: var(--color-brass);
+  color: var(--color-deep);
 }
 
-a.secondary {
-  border-color: var(--button-secondary-border);
+.details {
+  display: grid;
+  gap: var(--space-8);
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: var(--space-16) var(--space-6);
 }
 
-/* Enable hover only on non-touch devices */
-@media (hover: hover) and (pointer: fine) {
-  a.primary:hover {
-    background: var(--button-primary-hover);
-    border-color: transparent;
-  }
-
-  a.secondary:hover {
-    background: var(--button-secondary-hover);
-    border-color: transparent;
-  }
+.detailTitle {
+  font-size: var(--text-lg);
+  padding-bottom: var(--space-3);
+  border-bottom: var(--border-brass);
+  margin-bottom: var(--space-3);
 }
 
-@media (max-width: 600px) {
-  .main {
-    padding: 48px 24px;
-  }
-
-  .intro {
-    gap: 16px;
-  }
-
-  .intro h1 {
-    font-size: 32px;
-    line-height: 40px;
-    letter-spacing: -1.92px;
-  }
+.detailText {
+  color: var(--color-stone);
+  font-size: var(--text-sm);
 }
 
-@media (prefers-color-scheme: dark) {
-  .logo {
-    filter: invert();
+@media (min-width: 48rem) {
+  .title {
+    font-size: var(--text-4xl);
   }
 
-  .page {
-    --background: #000;
-    --foreground: #000;
-
-    --text-primary: #ededed;
-    --text-secondary: #999;
-
-    --button-primary-hover: #ccc;
-    --button-secondary-hover: #1a1a1a;
-    --button-secondary-border: #1a1a1a;
+  .subtitle {
+    font-size: var(--text-lg);
   }
-}
 
-.code {
-  font-family: var(--font-geist-mono);
-  font-size: 0.9em;
-  background: color-mix(in srgb, currentColor 8%, transparent);
-  padding: 0.1em 0.4em;
-  border-radius: 6px;
+  .details {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-12);
+  }
 }

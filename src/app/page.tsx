@@ -1,69 +1,54 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+/**
+ * Portada del restaurante.
+ *
+ * Tiene una sola acción principal —reservar—, tal como fija `docs/design.md`. Todo lo demás
+ * es secundario: quien llega con hambre y el teléfono en la mano debe alcanzar el formulario
+ * en un toque.
+ */
+import Link from 'next/link';
 
-export default function Home() {
+import styles from './page.module.css';
+
+export default function HomePage() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>
-            To get started, edit the{" "}
-            <code className={styles.code}>page.tsx</code> file.
-          </h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <>
+      <section className={styles.hero}>
+        <div className={styles.heroContent}>
+          <p className={styles.eyebrow}>Cocina de autor · Santiago</p>
+          <h1 className={styles.title}>Sabor Gourmet</h1>
+          <p className={styles.subtitle}>
+            Una carta breve que cambia con la temporada, en un salón pensado para conversar
+            sin prisa.
           </p>
+          <Link href="/reservar" className={styles.callToAction}>
+            Reservar una mesa
+          </Link>
         </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      </section>
+
+      <section className={styles.details}>
+        <article>
+          <h2 className={styles.detailTitle}>Servicio por turnos</h2>
+          <p className={styles.detailText}>
+            Servimos almuerzo a las 13:00, 14:00 y 15:00, y cena a las 20:00, 21:00 y 22:00.
+            Cada turno tiene el salón completo a su disposición.
+          </p>
+        </article>
+        <article>
+          <h2 className={styles.detailTitle}>Reserve en línea</h2>
+          <p className={styles.detailText}>
+            Consulte la disponibilidad real del día y confirme su mesa en menos de un minuto,
+            a cualquier hora.
+          </p>
+        </article>
+        <article>
+          <h2 className={styles.detailTitle}>Cambie cuando lo necesite</h2>
+          <p className={styles.detailText}>
+            Con el código de su reserva y su correo puede modificarla o cancelarla usted
+            mismo, sin llamar por teléfono.
+          </p>
+        </article>
+      </section>
+    </>
   );
 }
