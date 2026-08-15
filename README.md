@@ -11,7 +11,7 @@ administrar las reservas y la configuración del salón.
 | Análisis y diseño (`docs/`) | ✅ Completo |
 | Modelo de datos y migraciones | ✅ Completo |
 | Portal público: reservar, consultar, modificar y cancelar | ✅ Completo |
-| Panel de administración | ⏳ En desarrollo |
+| Panel del personal: reservas y configuración del salón | ✅ Completo |
 
 ## Tecnologías
 
@@ -102,7 +102,9 @@ solo muestra datos: nunca consulta la base ni contiene reglas de negocio.
 │   ├── app/                  Rutas, vistas y controladores (Server Actions)
 │   │   ├── reservar/         Buscar disponibilidad y confirmar la reserva
 │   │   ├── reserva/          Confirmación con el código
-│   │   └── mi-reserva/       Consultar, modificar y cancelar
+│   │   ├── mi-reserva/       Consultar, modificar y cancelar
+│   │   └── admin/            Panel del personal: reservas y mesas
+│   ├── proxy.ts              Filtro previo a las rutas del panel
 │   ├── components/           Piezas de interfaz compartidas
 │   ├── services/             Reglas de negocio
 │   ├── repositories/         Acceso a datos
@@ -133,6 +135,21 @@ instante.
 
 El comensal recibe un **código de reserva** (`SG-XXXXXX`) que, junto con su correo, le permite
 consultar, modificar y cancelar sin necesidad de crear una cuenta.
+
+## Panel del personal
+
+Disponible en `/admin`, protegido con la clave definida en `ADMIN_ACCESS_KEY`.
+
+| Pantalla | Qué permite |
+|---|---|
+| Reservas | Ver el listado del día, filtrar por fecha y estado, y abrir cada reserva. |
+| Detalle de la reserva | Ver los datos de contacto del comensal, modificar la reserva o cancelarla. |
+| Mesas | Registrar mesas, editarlas y ponerlas dentro o fuera de servicio. |
+
+El acceso se comprueba en dos lugares. `proxy.ts` redirige cuanto antes a quien no traiga
+sesión, para no cargar una pantalla que igualmente iba a rechazarse; y cada página y cada
+acción vuelven a comprobarla, porque una acción se puede invocar sin pasar por la navegación.
+La clave no se guarda en la galleta —solo su huella— y se compara en tiempo constante.
 
 ## Documentación
 
