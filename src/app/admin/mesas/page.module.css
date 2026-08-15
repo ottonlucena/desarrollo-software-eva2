@@ -1,0 +1,127 @@
+/* Configuración del salón. */
+
+.disclosure {
+  margin: var(--space-6) 0 var(--space-8);
+  padding: var(--space-4) var(--space-6);
+  border: var(--border-hairline);
+  border-radius: var(--radius);
+  background-color: var(--color-sand);
+}
+
+.disclosureSummary {
+  /* Zona táctil cómoda: es lo que se pulsa para desplegar el formulario. */
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  font-size: var(--text-sm);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-action);
+  cursor: pointer;
+}
+
+.disclosure[open] .disclosureSummary {
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-3);
+  border-bottom: var(--border-hairline);
+}
+
+.checkboxField {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.checkbox {
+  /* Zona táctil suficiente para el dedo, no solo para el puntero. */
+  width: 20px;
+  height: 20px;
+  margin-top: var(--space-1);
+  accent-color: var(--color-action);
+}
+
+.tableScroll {
+  overflow-x: auto;
+  border: var(--border-hairline);
+  border-radius: var(--radius);
+  background-color: #fff;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+  min-width: 40rem;
+}
+
+.table th,
+.table td {
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+  vertical-align: middle;
+  border-bottom: var(--border-hairline);
+}
+
+.table th {
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-stone);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.tableNumber {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  white-space: nowrap;
+}
+
+.rowInactive td {
+  color: var(--color-stone);
+  background-color: var(--color-bone);
+}
+
+.badgeActive,
+.badgeInactive {
+  display: inline-block;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius);
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.badgeActive {
+  background-color: rgba(74, 93, 58, 0.14);
+  color: var(--color-success);
+}
+
+.badgeInactive {
+  background-color: rgba(107, 98, 89, 0.16);
+  color: var(--color-stone);
+}
+
+.rowActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.rowLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  white-space: nowrap;
+}
+
+.rowError {
+  margin-top: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--color-error);
+}

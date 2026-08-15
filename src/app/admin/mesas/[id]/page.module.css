@@ -1,0 +1,6 @@
+/* Edición de una mesa. */
+
+.backLink {
+  margin-bottom: var(--space-6);
+  font-size: var(--text-sm);
+}

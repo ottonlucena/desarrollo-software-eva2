@@ -83,7 +83,10 @@
 }
 
 .hint {
+  /* En bloque, para que no se pegue a la etiqueta cuando ambas viven dentro de un <label>. */
+  display: block;
   font-size: var(--text-xs);
+  font-weight: 400;
   color: var(--color-stone);
 }
 
