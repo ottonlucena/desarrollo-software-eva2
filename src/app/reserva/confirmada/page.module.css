@@ -1,0 +1,38 @@
+/* Confirmación de la reserva. El código es el elemento dominante de la página. */
+
+.title {
+  margin-top: var(--space-8);
+  font-size: var(--text-2xl);
+}
+
+.intro {
+  margin-top: var(--space-4);
+  color: var(--color-stone);
+  font-size: var(--text-sm);
+}
+
+.code {
+  margin: var(--space-8) 0;
+  padding: var(--space-8) var(--space-4);
+  border: var(--border-brass);
+  border-radius: var(--radius);
+  background-color: var(--color-sand);
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  /* Separación amplia entre caracteres: el código se copia a mano y se dicta por teléfono. */
+  letter-spacing: 0.18em;
+  text-align: center;
+  /* Permite seleccionarlo de un toque en el teléfono. */
+  user-select: all;
+}
+
+.links {
+  margin-top: var(--space-6);
+  font-size: var(--text-sm);
+}
+
+@media (min-width: 40rem) {
+  .code {
+    font-size: var(--text-4xl);
+  }
+}

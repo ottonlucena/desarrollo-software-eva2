@@ -1,0 +1,45 @@
+/* Resumen de la visita antes de confirmar. */
+
+.summary {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0 0 var(--space-4);
+  padding: var(--space-6);
+  border: var(--border-hairline);
+  border-left: var(--border-brass);
+  border-radius: var(--radius);
+  background-color: var(--color-sand);
+}
+
+.summaryRow {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.summaryLabel {
+  font-size: var(--text-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-stone);
+}
+
+.summaryValue {
+  margin: 0;
+  font-size: var(--text-base);
+  /* Los nombres de los días en español no llevan mayúscula inicial, pero aquí abren línea. */
+  text-transform: capitalize;
+}
+
+.changeLink,
+.backLink {
+  margin-bottom: var(--space-8);
+  font-size: var(--text-sm);
+}
+
+@media (min-width: 40rem) {
+  .summaryRow {
+    grid-template-columns: 10rem 1fr;
+    gap: var(--space-4);
+    align-items: baseline;
+  }
+}

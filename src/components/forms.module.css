@@ -1,0 +1,201 @@
+/* Estilos compartidos por todos los formularios y avisos de la aplicación. */
+
+.page {
+  max-width: var(--form-width);
+  margin: 0 auto;
+  padding: var(--space-12) var(--space-6);
+}
+
+.pageWide {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: var(--space-12) var(--space-6);
+}
+
+.pageTitle {
+  font-size: var(--text-2xl);
+  margin-bottom: var(--space-2);
+}
+
+.pageIntro {
+  color: var(--color-stone);
+  font-size: var(--text-sm);
+  margin-bottom: var(--space-8);
+}
+
+.form {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.row {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.field {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.label {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-ink);
+}
+
+.optional {
+  font-weight: 400;
+  color: var(--color-stone);
+}
+
+.input,
+.select,
+.textarea {
+  width: 100%;
+  min-height: 48px;
+  padding: var(--space-3);
+  border: 1px solid var(--color-muted);
+  border-radius: var(--radius);
+  background-color: #fff;
+  color: var(--color-ink);
+  font-family: inherit;
+  /*
+   * 16 px como mínimo: por debajo de ese tamaño los navegadores móviles hacen zoom
+   * automático al enfocar el campo y descuadran la página.
+   */
+  font-size: var(--text-base);
+}
+
+.textarea {
+  min-height: 6rem;
+  resize: vertical;
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+  border-color: var(--color-action);
+}
+
+.inputInvalid {
+  border-color: var(--color-error);
+}
+
+.hint {
+  font-size: var(--text-xs);
+  color: var(--color-stone);
+}
+
+.fieldError {
+  font-size: var(--text-sm);
+  color: var(--color-error);
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 var(--space-8);
+  border: 1px solid var(--color-action);
+  border-radius: var(--radius);
+  background-color: var(--color-action);
+  color: var(--color-cream);
+  font-family: inherit;
+  font-size: var(--text-sm);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: var(--color-action-strong);
+  border-color: var(--color-action-strong);
+}
+
+.button[disabled],
+.button[aria-disabled='true'] {
+  background-color: var(--color-muted);
+  border-color: var(--color-muted);
+  cursor: progress;
+}
+
+.buttonSecondary {
+  composes: button;
+  background-color: transparent;
+  border-color: var(--color-stone);
+  color: var(--color-ink);
+}
+
+.buttonSecondary:hover {
+  background-color: var(--color-sand);
+  border-color: var(--color-ink);
+}
+
+.buttonDanger {
+  composes: button;
+  background-color: transparent;
+  border-color: var(--color-error);
+  color: var(--color-error);
+}
+
+.buttonDanger:hover {
+  background-color: var(--color-error);
+  border-color: var(--color-error);
+  color: var(--color-cream);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+/* Avisos ------------------------------------------------------------------ */
+
+.alert {
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-left: 3px solid;
+  border-radius: var(--radius);
+  font-size: var(--text-sm);
+}
+
+.alertError {
+  composes: alert;
+  border-color: var(--color-error);
+  background-color: rgba(155, 44, 44, 0.07);
+  color: var(--color-error);
+}
+
+.alertSuccess {
+  composes: alert;
+  border-color: var(--color-success);
+  background-color: rgba(74, 93, 58, 0.09);
+  color: var(--color-success);
+}
+
+.alertInfo {
+  composes: alert;
+  border-color: var(--color-brass);
+  background-color: rgba(176, 141, 87, 0.1);
+  color: var(--color-ink);
+}
+
+/*
+ * El icono acompaña siempre a un texto que dice lo mismo: el color nunca es el único
+ * portador de significado.
+ */
+.alertMark {
+  flex-shrink: 0;
+  font-weight: 700;
+}
+
+@media (min-width: 40rem) {
+  .row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

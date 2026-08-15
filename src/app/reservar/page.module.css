@@ -1,0 +1,98 @@
+/* Búsqueda de disponibilidad y rejilla de mesas. */
+
+.searchForm {
+  display: grid;
+  gap: var(--space-6);
+  padding: var(--space-6);
+  border: var(--border-hairline);
+  border-radius: var(--radius);
+  background-color: var(--color-sand);
+  align-items: end;
+}
+
+.results {
+  margin-top: var(--space-12);
+}
+
+.resultsTitle {
+  font-size: var(--text-xl);
+  padding-bottom: var(--space-3);
+  border-bottom: var(--border-brass);
+  /* La primera letra de un día en español no va en mayúscula, pero sí al abrir el título. */
+  text-transform: capitalize;
+}
+
+.resultsCount {
+  margin: var(--space-4) 0 var(--space-6);
+  font-size: var(--text-sm);
+  color: var(--color-stone);
+}
+
+.tableGrid {
+  display: grid;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tableCard {
+  display: grid;
+  gap: var(--space-1);
+  height: 100%;
+  padding: var(--space-6);
+  border: var(--border-hairline);
+  border-radius: var(--radius);
+  background-color: #fff;
+  color: var(--color-ink);
+  text-decoration: none;
+  transition: border-color 150ms ease;
+}
+
+.tableCard:hover {
+  border-color: var(--color-brass);
+  color: var(--color-ink);
+}
+
+.tableNumber {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+}
+
+.tableZone {
+  font-size: var(--text-sm);
+  color: var(--color-stone);
+}
+
+.tableCapacity {
+  font-size: var(--text-sm);
+  color: var(--color-stone);
+}
+
+.tableAction {
+  margin-top: var(--space-3);
+  font-size: var(--text-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-action);
+}
+
+@media (min-width: 40rem) {
+  .searchForm {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .tableGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 64rem) {
+  .searchForm {
+    grid-template-columns: 1.2fr 1fr 1fr auto;
+  }
+
+  .tableGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
